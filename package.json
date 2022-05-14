@@ -1,0 +1,32 @@
+{
+  "name": "file-editor",
+  "version": "1.0.0",
+  "description": "CLI tool that modifies HTML and CSS file's content using a search algorithm",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cristianmontenegrop/file-editor.git"
+  },
+  "keywords": [
+    "html",
+    "css",
+    "file",
+    "editor",
+    "search",
+    "elements"
+  ],
+  "author": "Cristian M",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cristianmontenegrop/file-editor/issues"
+  },
+  "homepage": "https://github.com/cristianmontenegrop/file-editor#readme",
+  "dependencies": {
+    "inquirer": "^8.2.2"
+  }
+}
