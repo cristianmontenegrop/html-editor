@@ -1,6 +1,5 @@
 import fs from 'fs';
 import util from 'util';
-import path from 'path';
 import inquirer from 'inquirer';
 
 // export async function writeOnFile(outputDirPath, editedFileContent) {
@@ -9,30 +8,16 @@ export async function writeOnFile(fileInfo) {
   // console.log('fileInfo in writeOnFile: ', fileInfo);
   fileInfo.editedFileContent = fileInfo.editedFileContent.join('');
 
-  const fsAccessPromise = util.promisify(fs.access);
-  const fsCopyPromise = util.promisify(fs.copyFile);
-  const fsUnlinkPromise = util.promisify(fs.unlink);
-  const fsAppendPromise = util.promisify(fs.appendFile);
-  let accessResponse;
+  const promisify = util.promisify;
+  const fsCopyPromise = promisify(fs.copyFile);
+  const fsUnlinkPromise = promisify(fs.unlink);
+  const fsAppendPromise = promisify(fs.appendFile);
+
   let writeOnFileObj = {
-    access: async function () {
+    access: function () {
       console.log('access!');
-      await fsAccessPromise(fileInfo.outputRelativeFilePath, fs.constants.R_OK)
-        .then((x) => {
-          console.log('Acces.then: ', x);
-        })
-        .catch((err) => {
-          console.log('Error!', err);
-          if (err.code === 'ENOENT') {
-            return 'Hello!!!';
-            // return err;
-          } else {
-            console.log('Error!', err);
-            return 'Crap!!';
-          }
-        });
-      console.log('accessResponse: ', accessResponse);
-      return accessResponse;
+      let fileExists = fs.existsSync(fileInfo.outputFilePath);
+      return fileExists;
     },
     copy: async function () {
       console.log('copy!');
@@ -56,23 +41,22 @@ export async function writeOnFile(fileInfo) {
     },
   };
 
-  await writeOnFileObj.access().then((x) => {
-    console.log('x: ', x);
-    // inquirer
-    //   .prompt([
-    //     {
-    //       name: 'confirmCopy',
-    //       type: 'confirm',
-    //       message:
-    //         'Warning!, existing file in output folder with same name, create copy?',
-    //     },
-    //   ])
-    //   .then(({ confirmCopy }) => {
-    //     if (confirmCopy) {
-    //       writeOnFileObj.copy(copyFile)
-    //       console.log('copyFile: ', copyFile);
-    //     }
-  });
+  let x = writeOnFileObj.access();
+
+  // inquirer
+  //   .prompt([
+  //     {
+  //       name: 'confirmCopy',
+  //       type: 'confirm',
+  //       message:
+  //         'Warning!, existing file in output folder with same name, create copy?',
+  //     },
+  //   ])
+  //   .then(({ confirmCopy }) => {
+  //     if (confirmCopy) {
+  //       writeOnFileObj.copy(copyFile)
+  //       console.log('copyFile: ', copyFile);
+  //     }
 
   // await fsAccesPromise(fileInfo.outputFilePath)
   //   .then((x) => {
