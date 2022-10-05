@@ -1,2 +1,3 @@
 # file-editor
-CLI tool that modifies HTML and CSS file's content using a search algorithm
+
+CLI tool that modifies HTML and CSS file's content using a search and replace algorithm
