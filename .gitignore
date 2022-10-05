@@ -2,7 +2,8 @@
 # insert-file-here/
 edited-file/*
 !edited-file/.gitkeep
-
+.insert-file-here/file.js
+.package-lock.json
 
 # Logs
 logs
@@ -75,7 +76,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-.insert-file-here/file.js
 
 # dotenv environment variables file
 .env
