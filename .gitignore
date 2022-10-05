@@ -1,6 +1,7 @@
 # Directories
 # insert-file-here/
 edited-file/*
+!edited-file/.gitkeep
 
 
 # Logs
