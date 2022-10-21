@@ -118,28 +118,6 @@ var fnObj = {
     }
   },
 
-  // goodbye: async function ({ replaceElementSuccess, writeOnFileResponse }) {
-  //   if (replaceElementSuccess && writeOnFileResponse) {
-  //     let outFileContent = await readFileContent(fileInfo.outputFilePath);
-  //     inquirer
-  //       .prompt([
-  //         {
-  //           type: 'confirm',
-
-  //           message: `how is this looking?: ${console.dir(outFileContent)}`,
-  //           name: 'confirmOutput',
-  //         },
-  //       ])
-  //       .then(({ confirmOutput }) => {
-  //         confirmOutput ? console.log('Done!, enjoy.') : fnObj.exit();
-  //       })
-  //       .catch((err) => {
-  //         console.err('Oops!, something went wrong');
-  //         throw err;
-  //       });
-  //   }
-  // },
-
   error: function (error) {
     console.log(`Oh no!, something went wrong, here is the error: ${error} `);
     fnObj.exit();
