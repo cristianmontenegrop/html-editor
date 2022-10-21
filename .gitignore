@@ -2,7 +2,8 @@
 # insert-file-here/
 edited-file/*
 !edited-file/.gitkeep
-.insert-file-here/file.js
+insert-file-here/*
+!insert-file-here/.gitkeep
 .package-lock.json
 
 # Logs
