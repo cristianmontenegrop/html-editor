@@ -2,7 +2,7 @@ import { indexFile, writeOnFile } from './index.js';
 
 export async function replaceElement(fileInfo) {
   // console.log('replaceElement() started executing');
-
+  // console.log('fileInfo in elementReplacer: ', fileInfo);
   const [oldElementBegining, oldElementEnd] = fileInfo.oldElement
     .replaceAll(' ', '')
     .split('*');
@@ -16,7 +16,7 @@ export async function replaceElement(fileInfo) {
     newElementEnd: newElementEnd,
     ...fileInfo,
   };
-  // console.log('fileInfo in elementReplacer: ', fileInfo);
+
   let { fileIndexingArrObj, allElementsArr } = await indexFile(fileInfo);
 
   let replacedElementsArray = fileIndexingArrObj.map(
