@@ -1,7 +1,6 @@
 import fs from 'fs';
 import util from 'util';
 import inquirer from 'inquirer';
-// import path from 'path';
 
 export async function writeOnFile(fileInfo) {
   console.log('function writeFile Executed!!');
@@ -64,28 +63,49 @@ export async function writeOnFile(fileInfo) {
   let x = fsFnObj.access();
   console.log('x: ', x);
   if (x) {
-    await inquirer
-      .prompt([
-        {
-          name: 'confirmCopy',
-          type: 'confirm',
-          message:
-            'Warning!, existing file in output folder with same name, create copy?',
-        },
-      ])
-      .then(async ({ confirmCopy }) => {
-        let copyRes;
-        if (confirmCopy) {
-          copyRes = await fsFnObj.copy();
-          console.log('copyRes: ', copyRes);
+    let { confirmCopy } = await inquirer.prompt([
+      {
+        name: 'confirmCopy',
+        type: 'confirm',
+        message:
+          'Warning!, existing file in output folder with same name, create copy?',
+      },
+    ]);
+
+    let copyRes;
+    if (confirmCopy) {
+      copyRes = await fsFnObj.copy();
+      console.log('copyRes: ', copyRes);
+      const fileUnlink = await fsFnObj.unLink(fileInfo.outputRelativeFilePath);
+      console.log('fileUnlink: ', fileUnlink);
+      const appendFile = await fsFnObj.append();
+      if (appendFile === undefined) {
+        return fsFnObj.access(fileInfo.outputRelativeFilePath);
+      } else {
+        return false;
+      }
+    } else {
+      //  disregard existing file, replace it
+      console.log('do not create copy, replace!!');
+      try {
+        const fileUnlink = await fsFnObj.unLink(
+          fileInfo.outputRelativeFilePath
+        );
+        console.log('fileUnlink: ', fileUnlink);
+        const appendFile = await fsFnObj.append();
+        if (appendFile === undefined) {
+          return fsFnObj.access(fileInfo.outputRelativeFilePath);
+        } else {
+          return false;
         }
-        if (copyRes === undefined) {
-          const fileUnlink = await fsFnObj.unLink(
-            fileInfo.outputRelativeFilePath
-          );
-          console.log('fileUnlink: ', fileUnlink);
-        }
-      });
+      } catch {
+        (err) => console.log('Error!', err);
+      }
+    }
+    // if (copyRes === undefined) {
+    //   const fileUnlink = await fsFnObj.unLink(fileInfo.outputRelativeFilePath);
+    //   console.log('fileUnlink: ', fileUnlink);
+    // }
   } else {
     try {
       const appendFile = await fsFnObj.append();
