@@ -73,6 +73,7 @@ export async function writeOnFile(fileInfo) {
     ]);
 
     let copyRes;
+    
     if (confirmCopy) {
       copyRes = await fsFnObj.copy();
       console.log('copyRes: ', copyRes);
