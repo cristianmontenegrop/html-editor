@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
+    "start_inquirer": "node indexInquirer.js",
+    "start_Object": "node indexObject.js",
     "test": "test"
   },
   "repository": {
@@ -27,6 +28,9 @@
   },
   "homepage": "https://github.com/cristianmontenegrop/file-editor#readme",
   "dependencies": {
-    "inquirer": "^8.2.2"
+    "inquirer": "^8.2.2",
+    "rename": "^1.0.4",
+    "gulp-sharp-responsive": "^0.3.0",
+    "sharp": "^0.30.4"
   }
 }
