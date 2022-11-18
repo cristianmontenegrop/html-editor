@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start_inquirer": "node indexInquirer.js",
-    "start_Object": "node indexObject.js",
+    "start_object": "node indexObject.js",
+    "img": "gulp img",
     "test": "test"
   },
   "repository": {
@@ -28,9 +29,10 @@
   },
   "homepage": "https://github.com/cristianmontenegrop/file-editor#readme",
   "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sharp-responsive": "^0.3.0",
     "inquirer": "^8.2.2",
     "rename": "^1.0.4",
-    "gulp-sharp-responsive": "^0.3.0",
     "sharp": "^0.30.4"
   }
 }
