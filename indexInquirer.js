@@ -144,7 +144,7 @@ var fnObj = {
     }
   },
   elementsToReplaceImgToPictureFullResponsive: async function () {
-    let { oldElement, imageTypeSelection, breakpointSelection } =
+    let { oldElement, imageTypeSelection, breakpointQuantity } =
       await inquirer.prompt([
         {
           type: 'input',
@@ -159,22 +159,53 @@ var fnObj = {
           choices: ['avif', 'webp', 'jpg', 'png', 'gif', 'heif', 'tiff'],
         },
         {
-          type: 'checkbox',
-          name: 'breakpointSelection',
-          message: 'Please select the desired breakpoints',
-          choices: [
-            {
-              name: '0-480px - 481-768px - 769-1279px - 1280+px',
-              value: ['0-480px', '481-768px', '769-1279px', '1280+px'],
-            },
-            {
-              name: '0-767px - 768-1023px - 1024+px',
-              value: ['0-767px', '768-1023px', '1024+px'],
-            },
-          ],
+          type: 'number',
+          name: 'breakpointQuantity',
+          message: 'How many breakpoints do you need?',
         },
       ]);
 
+    // let { breakpointSelection };
+
+    for (i=0;i>breakpointQuantity;i++) {
+      await inquirer.prompt([
+        {
+          type: 'number',
+          name: `breakpoint_start`,
+          message: `Please insert breakpoint ${i+1} start`,
+        },
+        {
+          type: 'number',
+          name: `breakpoint_end`,
+          message: `Please insert breakpoint ${i+1} end`,
+        },
+        {
+          type: 'number',
+          name: `image_width`,
+          message: `Please insert image ${i+1} width`,
+        },
+        {
+          type: 'input',
+          name: `suffix`,
+          message: `Please insert image ${i+1} suffix (eg: -xs)`,
+        },
+        // {
+        //   type: 'checkbox',
+        //   name: 'breakpointSelection',
+        //   message: 'Please select the desired breakpoints',
+        //   choices: [
+        //     {
+        //       name: '0-480px - 481-768px - 769-1279px - 1280+px',
+        //       value: ['0-480px', '481-768px', '769-1279px', '1280+px'],
+        //     },
+        //     {
+        //       name: '0-767px - 768-1023px - 1024+px',
+        //       value: ['0-767px', '768-1023px', '1024+px'],
+        //     },
+        //   ],
+        // },
+      ]);
+    });
     let { replaceElementSuccess, writeOnFileResponse } =
       await replaceImageToPicture({
         oldElement: oldElement,
