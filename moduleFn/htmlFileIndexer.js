@@ -3,7 +3,7 @@
 import fs from 'fs';
 
 export function indexFile(fileInfo) {
-  console.log('indexFile() started executing');
+  // console.log('indexFile() started executing');
   // console.log('fileInfo in htmlFileIndexer: ', fileInfo);
   let result = {};
   let propertiesArray = [];
@@ -132,8 +132,5 @@ export function indexFile(fileInfo) {
     }
   }
 
-  console.log('indexFile() finished executing');
-  // console.log('indexFile() final Result: ');
-  // console.dir(fileIndexingArrObj);
   return { fileIndexingArrObj, allElementsArr };
 }
