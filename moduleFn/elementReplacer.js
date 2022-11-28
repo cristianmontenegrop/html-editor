@@ -73,17 +73,7 @@ export async function replaceImageToPicture(fileInfo) {
     ...fileInfo,
   };
 
-  // console.log('fileInfo in replaceImageToPicture: ', fileInfo);
-
-  //retrieves
   let { fileIndexingArrObj, allElementsArr } = indexFile(fileInfo);
-
-  //
-  // console.log('fileIndexingArrObj: ');
-  // console.log(fileIndexingArrObj);
-
-  // console.log('allElementsArr: ');
-  // console.dir(allElementsArr);
 
   let replacedElementsArray = fileIndexingArrObj.map(
     ({ result, propertiesArray }) => {
@@ -101,17 +91,10 @@ export async function replaceImageToPicture(fileInfo) {
       imageTypeSelection.map((x) => {
         let sourceElementSrcset = '';
         let sourceElementSizes = '';
-        // x = 'avif' | 'webp' | 'jpeg'
 
         // Map looper inside map looper that loops through breakPointSelection to configure
         // "sizes and srcset attribute" in each <source>
         breakPointSelection.map((y) => {
-          // {
-          //     breakpoint_start: 0,
-          //     breakpoint_end: 480,
-          //     image_width: 480,
-          //     suffix: '-xs',
-          //   }
 
           if (y.breakpoint_end) {
             sourceElementSrcset += `${rename(result.imageSourcePath, {
@@ -131,13 +114,11 @@ export async function replaceImageToPicture(fileInfo) {
       });
 
       // This appends the newly constructed element and replaces it for the old one
-      // in AllElementsArr
       let deletedString = allElementsArr.splice(
         result.arrIndexPosition,
         1,
         `${newElementBegining} ${propertiesString} ${newElementEnd} \n ${allSourcesString}  \n <img ${propertiesString} /> \n </picture>`
       );
-
       return;
     }
   );
@@ -156,64 +137,3 @@ export async function replaceImageToPicture(fileInfo) {
     writeOnFileResponse: writeOnFileResponse,
   };
 }
-
-// {
-//   result: {
-//     alt: false,
-//     crossorigin: false,
-//     class: 'class="lazy size-1"',
-//     dataSrc: 'data-src="./src/img/Floral_Pattern_6000x6000.jpg"',
-//     height: false,
-//     id: false,
-//     loading: false,
-//     sizes: false,
-//     srcset: false,
-//     src: false,
-//     width: false,
-//     elString: '<img\n' +
-//       '        class="lazy size-1"\n' +
-//       '        data-src="./src/img/Floral_Pattern_6000x6000.jpg"\n' +
-//       '      />',
-//     verifyString: '<img\n' +
-//       '        class="lazy size-1"\n' +
-//       '        data-src="./src/img/Floral_Pattern_6000x6000.jpg"\n' +
-//       '      />',
-//     arrIndexPosition: 220,
-//     indexStart: 14624,
-//     length: 99,
-//     imageSourcePath: './src/img/Floral_Pattern_6000x6000.jpg',
-//     imageFileExtension: 'jpg'
-//   },
-//   propertiesArray: [
-//     false,
-//     false,
-//     'class="lazy size-1"',
-//     'data-src="./src/img/Floral_Pattern_6000x6000.jpg"',
-//     false,
-//     false,
-//     false,
-//     false,
-//     false,
-//     false,
-//     false
-//   ]
-// }
-
-// fileInfo = {
-//   oldElement: oldElement,
-//   imageTypeSelection: imageTypeSelection,
-//   breakPointSelection: breakPointSelection,
-//   inputDirPath: inputDirPath,
-//   inputDirRelativePath: './insert-file-here',
-//   inputFileName: inputFileName,
-//   inputFilePath: inputFilePath,
-//   outputFileName: inputFileName,
-//   outputFilePath: path.join(__dirname, './edited-file', inputFileName),
-//   outputDirPath: path.join(__dirname, './edited-file'),
-//   outputRelativeDirPath: './edited-file',
-//   outputRelativeFilePath: path.join('./edited-file', inputFileName),
-//   inputFileContent: await readFileContent(inputFilePath),
-// };
-
-// imageTypeSelection: ['avif', 'webp', 'img']
-//breakPointSelection: ['0-480px', '481-768px', '769-1279px', '1280+px']
