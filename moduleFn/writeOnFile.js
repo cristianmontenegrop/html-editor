@@ -3,7 +3,7 @@ import util from 'util';
 import inquirer from 'inquirer';
 
 export async function writeOnFile(fileInfo) {
-  console.log('function writeFile Executed!!');
+  // console.log('function writeFile Executed!!');
   fileInfo.editedFileContent = fileInfo.editedFileContent.join('');
 
   const promisify = util.promisify;
@@ -103,10 +103,7 @@ export async function writeOnFile(fileInfo) {
         (err) => console.log('Error!', err);
       }
     }
-    // if (copyRes === undefined) {
-    //   const fileUnlink = await fsFnObj.unLink(fileInfo.outputRelativeFilePath);
-    //   console.log('fileUnlink: ', fileUnlink);
-    // }
+
   } else {
     try {
       const appendFile = await fsFnObj.append();
