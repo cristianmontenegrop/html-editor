@@ -2,7 +2,6 @@ import img from './gulpfile.js';
 import input_object from './index.js';
 import { replaceImageToPicture, readFileContent } from './moduleFn/index.js';
 
-
 // if breakpoint_end is false, max-width is replaced by min-width
 let createImageResponsiveObject = async function () {
   // console.log('createImageResponsiveObject');
@@ -66,7 +65,11 @@ if (input_object.do_you_need_image_conversion) {
       image_destination: input_object.image_destination,
       ...x,
     };
-    img(x);
+    try {
+      img(x);
+    } catch (error) {
+      console.error('Please check the image_source path', error);
+    }
   });
 }
 
