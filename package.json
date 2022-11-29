@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start_inquirer": "node indexInquirer.js",
-    "start_object": "node indexObject.js",
+    "inquirer": "node indexInquirer.js",
+    "object": "node indexObject.js",
     "img": "gulp img",
     "test": "test"
   },
