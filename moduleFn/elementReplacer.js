@@ -95,7 +95,6 @@ export async function replaceImageToPicture(fileInfo) {
         // Map looper inside map looper that loops through breakPointSelection to configure
         // "sizes and srcset attribute" in each <source>
         breakPointSelection.map((y) => {
-
           if (y.breakpoint_end) {
             sourceElementSrcset += `${rename(result.imageSourcePath, {
               suffix: y.suffix,
