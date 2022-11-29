@@ -14,14 +14,12 @@ const __dirname = path.dirname(__filename);
 const inputDirPath = path.join(__dirname, './insert-file-here');
 let fileInfo;
 let inputFileName;
-// let inputFileNamesArr;
+
 
 var fnObj = {
   structureFileNameData: async function (inputFileName) {
     const inputFilePath = path.join(inputDirPath, inputFileName);
-    // console.log('readFilesResponse: ', readFilesResponse);
-    // console.log('inputFilePath: ', inputFilePath);
-    // console.log('file content: ', readFileContentResponse);
+
     fileInfo = {
       inputDirPath: inputDirPath,
       inputDirRelativePath: './insert-file-here',
@@ -34,7 +32,7 @@ var fnObj = {
       outputRelativeFilePath: path.join('./edited-file', inputFileName),
       inputFileContent: await readFileContent(inputFilePath),
     };
-    // console.log('fileInfo in index.js: ', fileInfo);
+
     return fileInfo;
   },
   greetings: async function () {
@@ -71,7 +69,6 @@ var fnObj = {
         inputFileName = fileSelection;
         fileInfo = await fnObj.structureFileNameData(fileSelection);
         fnObj.selectAction();
-        // fnObj.elementsToReplace();
       });
   },
 
@@ -118,30 +115,20 @@ var fnObj = {
       },
     ]);
 
-    // console.log('final answer in Inquirer: ');
-    // console.table(answer);
-    // fnObj.goodbye();
-    // });
-
-    // console.log(oldElement, newElement, selfEnclosed);
     let { replaceElementSuccess, writeOnFileResponse } = await replaceElement({
       oldElement,
       newElement,
       selfEnclosed,
-      //replacing prompt for information, disable later
-      // oldElement: '<img * />',
-      // newElement: '<yikes * />',
-      // selfEnclosed: true,
       ...fileInfo,
     });
 
     if (replaceElementSuccess && writeOnFileResponse) {
-      // console.log('Great!, all went along nicely');
       fnObj.exit({ replaceElementSuccess, writeOnFileResponse });
     } else {
       fnObj.error();
     }
   },
+
   elementsToReplaceImgToPictureFullResponsive: async function () {
     let breakPointSelection = [];
     let {
@@ -219,7 +206,6 @@ var fnObj = {
     }
 
     //execute image conversion bundle
-
     if (do_you_need_image_conversion) {
       await fnObj
         .createImageResponsiveObject({
@@ -291,7 +277,7 @@ var fnObj = {
   },
 
   error: function (error) {
-    console.log(`Oh no!, something went wrong, here is the error: ${error} `);
+    console.error(`Oh no!, something went wrong, here is the error: ${error} `);
     fnObj.exit();
   },
   exit: function () {
