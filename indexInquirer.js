@@ -1,13 +1,13 @@
 import inquirer from 'inquirer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import img from './gulpfile.js';
 import {
   readFiles,
   readFileContent,
   replaceElement,
   replaceImageToPicture,
 } from './moduleFn/index.js';
-import util from 'util';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -94,7 +94,6 @@ var fnObj = {
     if (actionSelection === 'elementToElement') {
       fnObj.elementsToReplaceElementToElement();
     } else if (actionSelection === 'imgToPictureFullResponsive') {
-      console.log('hello!');
       fnObj.elementsToReplaceImgToPictureFullResponsive();
     }
   },
@@ -124,7 +123,7 @@ var fnObj = {
     // fnObj.goodbye();
     // });
 
-    console.log(oldElement, newElement, selfEnclosed);
+    // console.log(oldElement, newElement, selfEnclosed);
     let { replaceElementSuccess, writeOnFileResponse } = await replaceElement({
       oldElement,
       newElement,
@@ -137,82 +136,111 @@ var fnObj = {
     });
 
     if (replaceElementSuccess && writeOnFileResponse) {
-      console.log('Great!, all went along nicely');
+      // console.log('Great!, all went along nicely');
       fnObj.exit({ replaceElementSuccess, writeOnFileResponse });
     } else {
       fnObj.error();
     }
   },
   elementsToReplaceImgToPictureFullResponsive: async function () {
-    let { oldElement, imageTypeSelection, breakpointQuantity } =
-      await inquirer.prompt([
-        {
-          type: 'input',
-          message:
-            'please write down the element that needs to be replaced, and an "*" where attributes go, all existing attributes will be kept',
-          name: 'oldElement',
-        },
-        {
-          type: 'checkbox',
-          name: 'imageTypeSelection',
-          message: 'Please select the output image types',
-          choices: ['avif', 'webp', 'jpg', 'png', 'gif', 'heif', 'tiff'],
-        },
-        {
-          type: 'number',
-          name: 'breakpointQuantity',
-          message: 'How many breakpoints do you need?',
-        },
-      ]);
+    let breakPointSelection = [];
+    let {
+      oldElement,
+      imageTypeSelection,
+      breakpointQuantity,
+      do_you_need_image_conversion,
+    } = await inquirer.prompt([
+      {
+        type: 'input',
+        message:
+          'please write down the element that needs to be replaced, and an "*" where attributes go, all existing attributes will be kept',
+        name: 'oldElement',
+      },
+      {
+        type: 'checkbox',
+        name: 'imageTypeSelection',
+        message: 'Please select the output image types',
+        choices: ['avif', 'webp', 'jpg', 'png', 'gif', 'heif', 'tiff'],
+      },
+      {
+        type: 'number',
+        name: 'breakpointQuantity',
+        message: 'How many breakpoints do you need?',
+      },
+      {
+        type: 'confirm',
+        name: 'do_you_need_image_conversion',
+        message: 'do you need to convert your image files as well?',
+      },
+    ]);
 
-    // let { breakpointSelection };
+    const asyncIterable = {
+      [Symbol.asyncIterator]() {
+        let i = 0;
+        return {
+          next() {
+            const done = i === breakpointQuantity;
+            const value = done ? undefined : i++;
+            return Promise.resolve({ value, done });
+          },
+          return() {
+            return { done: true };
+          },
+        };
+      },
+    };
 
-    for (i=0;i>breakpointQuantity;i++) {
-      await inquirer.prompt([
-        {
-          type: 'number',
-          name: `breakpoint_start`,
-          message: `Please insert breakpoint ${i+1} start`,
-        },
-        {
-          type: 'number',
-          name: `breakpoint_end`,
-          message: `Please insert breakpoint ${i+1} end`,
-        },
-        {
-          type: 'number',
-          name: `image_width`,
-          message: `Please insert image ${i+1} width`,
-        },
-        {
-          type: 'input',
-          name: `suffix`,
-          message: `Please insert image ${i+1} suffix (eg: -xs)`,
-        },
-        // {
-        //   type: 'checkbox',
-        //   name: 'breakpointSelection',
-        //   message: 'Please select the desired breakpoints',
-        //   choices: [
-        //     {
-        //       name: '0-480px - 481-768px - 769-1279px - 1280+px',
-        //       value: ['0-480px', '481-768px', '769-1279px', '1280+px'],
-        //     },
-        //     {
-        //       name: '0-767px - 768-1023px - 1024+px',
-        //       value: ['0-767px', '768-1023px', '1024+px'],
-        //     },
-        //   ],
-        // },
-      ]);
-    });
+    for await (let num of asyncIterable) {
+      breakPointSelection = [
+        await inquirer.prompt([
+          {
+            type: 'number',
+            name: `breakpoint_start`,
+            message: `Please insert breakpoint ${num + 1} start`,
+          },
+          {
+            type: 'number',
+            name: `breakpoint_end`,
+            message: `Please insert breakpoint ${num + 1} end`,
+          },
+          {
+            type: 'number',
+            name: `image_width`,
+            message: `Please insert image ${num + 1} width`,
+          },
+          {
+            type: 'input',
+            name: `suffix`,
+            message: `Please insert image ${num + 1} suffix (eg: -xs)`,
+          },
+        ]),
+        ...breakPointSelection,
+      ];
+    }
+
+    //execute image conversion bundle
+
+    if (do_you_need_image_conversion) {
+      await fnObj
+        .createImageResponsiveObject({
+          breakPointSelection: breakPointSelection,
+          imageTypeSelection: imageTypeSelection,
+        })
+        .then((x) => {
+          console.log('.then => img(x): ', x);
+          try {
+            img(x);
+          } catch (error) {
+            console.error('Please check the image_source path', error);
+          }
+        });
+    }
+
     let { replaceElementSuccess, writeOnFileResponse } =
       await replaceImageToPicture({
-        oldElement: oldElement,
+        element_to_replace: oldElement,
         imageTypeSelection: imageTypeSelection,
-        breakpointSelection: breakpointSelection,
-        //replacing prompt for information, disable later
-        // oldElement: '<img * />',
+        breakPointSelection: breakPointSelection,
         ...fileInfo,
       });
 
@@ -222,6 +250,44 @@ var fnObj = {
     } else {
       fnObj.error();
     }
+  },
+
+  createImageResponsiveObject: async function ({
+    imageTypeSelection,
+    breakPointSelection,
+  }) {
+    let { image_source, image_destination } = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'image_source',
+        message: 'what is the image/s directory path?',
+      },
+      {
+        type: 'input',
+        name: 'image_destination',
+        message: 'what is the image/s directory destination path?',
+      },
+    ]);
+
+    let image_responsive_object = { formats: [] };
+    imageTypeSelection.map((image_format) => {
+      breakPointSelection.map(({ image_width, suffix }) => {
+        image_responsive_object.formats.push({
+          width: image_width,
+          format: image_format,
+          rename: { suffix: suffix },
+        });
+        return;
+      });
+      return;
+    });
+    console.log('image_responsive_object: ');
+    console.dir(image_responsive_object.formats);
+    return {
+      image_source: image_source,
+      image_destination: image_destination,
+      ...image_responsive_object,
+    };
   },
 
   error: function (error) {
